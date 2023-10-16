@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:p="http://www.springframework.org/schema/p"
+  xmlns:c="http://www.springframework.org/schema/c"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+   xmlns:util="http://www.springframework.org/schema/util"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans.xsd 
+ http://www.springframework.org/schema/context
+  http://www.springframework.org/schema/context/spring-context.xsd
+  http://www.springframework.org/schema/util
+  http://www.springframework.org/schema/util/spring-util.xsd
+  http://www.springframework.org/schema/aop 
+  http://www.springframework.org/schema/aop/spring-aop.xsd"> 
+  
+ 	<util:list id="ls" list-class="java.util.ArrayList">
+		<value>1</value>
+		<value>2</value>
+		<value>3</value>
+	</util:list>
+	<bean name="standalone" class="com.spring.standalone.Standalone">
+		<property name="ls" ref="ls"/>
+	</bean>
+	<context:annotation-config />
+	<context:component-scan base-package="com.spring.autowiring"/>
+	<context:component-scan base-package="com.spring.component"/>
+	<context:component-scan base-package="com.spring.aop"/>
+	<aop:aspectj-autoproxy />  
+	
+	
+ 	<bean name="stud" class="com.spring.basics.Student">
+ 		<property name="id">
+ 			<value>1</value>
+ 		</property>
+ 		<property name="name" value="Imran"/>
+ 	</bean>
+ 	<!-- All this are setter dependency injection -->
+ 	<!-- Using Property Schema -->
+ 	<bean name="primitive" class="com.spring.dependencyInjection.PrimitiveData">
+ 		<property name="id" value="1"/>
+ 		<property name="name" value="Imran"/>
+ 		<property name="lname">
+ 			<value>Khan</value>
+ 		</property>
+ 	</bean>
+ 	<!-- We can also have multiple beans for a single class -->
+ 	<bean name="nonprimitive" class="com.spring.dependencyInjection.NonPrimitive">
+ 		<property name="list">
+ 			<list>
+ 				<value>Imran</value>
+ 				<value>Ayaan</value>
+ 			</list>
+ 		</property>
+ 		<property name="set">
+ 			<set>
+ 				<value>Junaid</value>
+ 				<value>Alfred</value>
+ 			</set>
+ 		</property>
+ 		<property name="prop">
+ 			<props>
+ 				<prop key="driverName">com.mysql.jdbc.Driver</prop>
+ 				<prop key="username">root</prop>
+ 			</props>
+ 		</property>
+ 		<property name="map">
+ 			<map>
+ 				<entry key="1" value="Imran"/>
+ 				<entry key="2" value="Ayaan"/>
+ 			</map>
+ 		</property>
+ 	</bean>
+ 	<bean name="object" class="com.spring.dependencyInjection.References">
+ 		<property name="nonPrimitive" ref="nonprimitive"/>
+ 	</bean>
+ 	
+ 	<bean name="primitive1" class="com.spring.dependencyInjection.PrimitiveData" p:id="2" p:name="Alfred" p:lname="George"/>
+ 	
+ 	<!-- Constructor Injection -->
+ 	<bean name="primitive2" class="com.spring.dependencyInjection.PrimitiveData">
+ 		<constructor-arg value="3"/>
+ 		<constructor-arg value="Junaid"/>
+ 		<constructor-arg value="Golandaj"/>
+ 	</bean>
+ 	<bean name="primitive3" class="com.spring.dependencyInjection.PrimitiveData" c:id="4" c:name="Ayaan" c:lname="Khan"/>
+ 	
+ 	<!-- Constructor ambiguity -->
+ 	<bean name="ambiguity" class="com.spring.constructorAmbiguity.Student">
+ 		<constructor-arg value="1"/>
+ 		<constructor-arg value="2"/>
+ 	</bean>
+ 	
+ 	<bean name="ambiguity1" class="com.spring.constructorAmbiguity.Student">
+ 		<constructor-arg value="1" type="int"/>
+ 		<constructor-arg value="2" type="int"/>
+ 	</bean>
+ 	
+ 	<bean name="ambiguity2" class="com.spring.constructorAmbiguity.Student">
+ 		<constructor-arg value="1" type="int" index="1"/>
+ 		<constructor-arg value="2" type="int" index="0"/>
+ 	</bean>
+ 	<!-- LifeCyle -->
+ 	<bean name="lifeConfig" init-method="init" destroy-method="destroy" class="com.spring.lifecycle.LifecycleUsingConfig"/>
+ 	<bean name="lifeInterface" class="com.spring.lifecycle.LifeCycleUsingInterfaces"/>
+ 	<bean name="lifeAnnotate" class="com.spring.lifecycle.LifecyleUsingAnnotation"/>
+ 	
+ 	<!-- Autowiring -->
+ 	<!-- byName -->
+ 	<bean name="professor" class="com.spring.autowiring.Professor">
+ 		<property name="id" value="5"/>
+ 		<property name="name" value="Junaid"/>
+ 	</bean>
+ 	<bean name="name" class="com.spring.autowiring.ByName" autowire="byName"/>
+ 	<bean name="type" class="com.spring.autowiring.ByType" autowire="byType"/>
+ 	<bean name="con" class="com.spring.autowiring.ConstructorType" autowire="constructor"/>
+ 	
+ 	<!-- Autowiring Annotation -->
+ 	<bean name="prof1" class="com.spring.autowiring.Annotations"/>
+
+ </beans>
+ 
